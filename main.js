@@ -93,6 +93,62 @@ function mergeSort(arr) {
   return merging(mergeSort(left), mergeSort(right));
 }
 
+// ====================== Prim Algorithm ===============
+let V = 5;
+let let_MAX = Number.MAX_VALUE;
+
+function isValidEdge(u, v, inMST) {
+  if (u == v) return false;
+  if (inMST[u] == false && inMST[v] == false) return false;
+  else if (inMST[u] == true && inMST[v] == true) return false;
+  return true;
+}
+
+function primMST(cost) {
+  let inMST = Array(V).fill(false);
+
+  inMST[0] = true;
+
+  let edge_count = 0,
+    mincost = 0;
+  while (edge_count < V - 1) {
+    let min = let_MAX,
+      a = -1,
+      b = -1;
+    for (let i = 0; i < V; i++) {
+      for (let j = 0; j < V; j++) {
+        if (cost[i][j] < min) {
+          if (isValidEdge(i, j, inMST)) {
+            min = cost[i][j];
+            a = i;
+            b = j;
+          }
+        }
+      }
+    }
+
+    if (a != -1 && b != -1) {
+      document.write(
+        "Edge " +
+          edge_count++ +
+          ": (" +
+          a +
+          "," +
+          b +
+          ") " +
+          "cost: " +
+          min +
+          "<br/>"
+      );
+      mincost = mincost + min;
+      inMST[b] = inMST[a] = true;
+    }
+  }
+  document.write("<br>");
+  document.write("  ");
+  document.write("Minimum cost = " + mincost);
+}
+
 // ====================== Testing ======================
 
 let arr = [59, 58, 42, 41, 37, 31, 26];
@@ -105,3 +161,13 @@ console.log(insertionSort([].concat(arr)));
 
 console.log("=== Merge Sort ===");
 console.log(mergeSort([].concat(arr)));
+
+let cost = [
+  [let_MAX, 2, let_MAX, 6, let_MAX],
+  [2, let_MAX, 3, 8, 5],
+  [let_MAX, 3, let_MAX, let_MAX, 7],
+  [6, 8, let_MAX, let_MAX, 9],
+  [let_MAX, 5, 7, 9, let_MAX],
+];
+
+primMST(cost);
